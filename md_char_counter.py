@@ -2,6 +2,9 @@
 """
 Markdownファイルの##セクション配下の文字数を自動計算し、
 ###文字数: として出力するスクリプト
+
+各##セクションの本文（##見出しの次の行から、次の全ての見出しまで）の
+文字数をカウントして、### 文字数: の行を自動挿入・更新します。
 """
 
 import os
@@ -30,6 +33,7 @@ def count_section_chars(section_content):
 def process_markdown_file(file_path):
     """
     Markdownファイルを処理して文字数を更新
+    各##セクションの本文（##見出しの次の行から、次の全ての見出しまで）の文字数をカウント
     """
     try:
         with open(file_path, 'r', encoding='utf-8') as f:
@@ -42,9 +46,9 @@ def process_markdown_file(file_path):
         if not content.startswith('\n'):
             content = '\n' + content
         sections = re.split(r'(?=\n##[ 　])', content)
-        
+
         updated_content = ""
-        
+
         for i, section in enumerate(sections):
             # ##で始まるかチェック（半角・全角スペース両対応）
             if i == 0 and not (section.strip().startswith('## ') or section.strip().startswith('##　')):
@@ -56,25 +60,43 @@ def process_markdown_file(file_path):
                 if section.startswith('\n'):
                     updated_content += '\n'
                     section = section[1:]
-                
+
                 # ## タイトル行と本文を分離
                 lines = section.split('\n')
                 title_line = lines[0]  # ## タイトル
-                
-                # ### 文字数: の行を探して除外
+
+                # 本文部分を抽出（次の見出しまで、または最後まで）
+                # ### 文字数: の行と、それ以降の見出し（#で始まる行）は除外
                 body_lines = []
-                char_count_line_found = False
                 for line in lines[1:]:
+                    # ### 文字数: の行はスキップ
                     if line.startswith('### 文字数:'):
-                        char_count_line_found = True
                         continue
+                    # 次の見出し（#で始まる行）が来たら終了
+                    if line.startswith('#'):
+                        break
                     body_lines.append(line)
-                
+
                 body_text = '\n'.join(body_lines)
                 char_count = count_section_chars(body_text)
-                
-                # セクションを再構築
-                updated_content += f"{title_line}\n### 文字数: {char_count}\n{body_text}"
+
+                # セクションを再構築（次の見出し以降も含める）
+                # 次の見出し以降の内容を保持
+                remaining_lines = []
+                found_next_heading = False
+                for line in lines[1:]:
+                    if line.startswith('### 文字数:'):
+                        continue
+                    if line.startswith('#') and not found_next_heading:
+                        found_next_heading = True
+                    if found_next_heading:
+                        remaining_lines.append(line)
+
+                remaining_text = '\n'.join(remaining_lines)
+                if remaining_text:
+                    updated_content += f"{title_line}\n### 文字数: {char_count}\n{body_text}\n{remaining_text}"
+                else:
+                    updated_content += f"{title_line}\n### 文字数: {char_count}\n{body_text}"
 
         # 内容が変更された場合のみ書き込み
         if updated_content != content:
