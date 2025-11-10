@@ -1,8 +1,10 @@
+
 # md_utils
 
 Markdownファイルの`##`見出しセクションごとの文字数を自動カウントして、`### 文字数: <N>`の行を挿入するシンプルなツールです。
 
 ## 機能
+### 文字数: 147
 
 - 指定したディレクトリ内の`.md`ファイルを再帰的に処理
 - 各`##`セクションの本文文字数をカウント（スペース・改行を除く）
@@ -11,10 +13,12 @@ Markdownファイルの`##`見出しセクションごとの文字数を自動�
 - `--no-recursive`オプションでサブディレクトリを除外
 
 ## 必要環境
+### 文字数: 12
 
 - Python 3.8以上
 
 ## セットアップ
+### 文字数: 262
 
 ### 1. リポジトリをクローン
 
@@ -40,6 +44,7 @@ pip install -r requirements.txt
 現在は外部依存なしで動作します。
 
 ## 使い方
+### 文字数: 339
 
 ### 基本的な使い方
 
@@ -74,6 +79,7 @@ python md_char_counter.py ./docs --watch --no-recursive
 ```
 
 ## 実行例
+### 文字数: 282
 
 ```bash
 $ python md_char_counter.py ./test_docs
@@ -97,6 +103,7 @@ $ python md_char_counter.py ./test_docs
 ```
 
 ## 処理の仕組み
+### 文字数: 153
 
 - Markdownファイル内の`##`で始まる見出しを検出
 - 各セクションの本文（`##`見出しの次の行から、次の`##`見出しまで）の文字数をカウント
@@ -107,10 +114,12 @@ $ python md_char_counter.py ./test_docs
 
 ```markdown
 ## セクション1
+### 文字数: 8
 
-これは本文です。
+これは 本文です。
 
 ## セクション2
+### 文字数: 42
 
 もう一つのセクションです。
 ```
@@ -119,39 +128,23 @@ $ python md_char_counter.py ./test_docs
 
 ```markdown
 ## セクション1
-### 文字数: 9
+### 文字数: 8
 
 これは本文です。
 
 ## セクション2
-### 文字数: 13
+### 文字数: 16
 
 もう一つのセクションです。
 ```
 
-## 仮想環境について
-
-プロジェクト直下に`.venv`を作成することをおすすめします：
-
-- エディタ（VSCodeなど）が自動認識
-- 開発者全員が同じ手順で環境構築可能
-- `.gitignore`に含まれているため誤ってコミットされない
-
-## GitHubへのアップロード
-
-```bash
-git init
-git add .
-git commit -m "Initial commit"
-git branch -M main
-git remote add origin https://github.com/sumomo/md_utils.git
-git push -u origin main
-```
 
 ## 作者
+### 文字数: 6
 
 sumomo
 
 ## ライセンス
+### 文字数: 6
 
 後で追加予定

@@ -204,16 +204,24 @@ def main():
     """
     メイン処理
     """
-    if len(sys.argv) < 2:
-        print("使用方法: python md_char_counter.py <ディレクトリパス> [--watch] [--no-recursive]")
+    # 引数の解析
+    args = [arg for arg in sys.argv[1:] if not arg.startswith('--')]
+
+    # ディレクトリパスの決定（指定なしの場合はカレントディレクトリ）
+    if len(args) == 0:
+        directory_path = '.'
+        print("使用方法: python md_char_counter.py [ディレクトリパス] [--watch] [--no-recursive]")
         print("\n例:")
-        print("  python md_char_counter.py ./docs")
+        print("  python md_char_counter.py          # カレントディレクトリを処理")
+        print("  python md_char_counter.py ./docs   # 指定ディレクトリを処理")
+        print("  python md_char_counter.py --watch  # カレントディレクトリを監視")
         print("  python md_char_counter.py ./docs --watch  # ファイル変更を監視")
         print("  python md_char_counter.py ./docs --no-recursive  # サブディレクトリを除外")
         print("  python md_char_counter.py ./docs --watch --no-recursive")
-        sys.exit(1)
+        print("\nディレクトリ指定なしでカレントディレクトリを処理します...\n")
+    else:
+        directory_path = args[0]
 
-    directory_path = sys.argv[1]
     recursive = '--no-recursive' not in sys.argv
     watch_mode = '--watch' in sys.argv
 
